@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>GigHub - Find the Right Talent</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+
+<body class="bg-slate-50 text-gray-900">
+
+    <!-- Navbar -->
+    <nav class="bg-white border-b">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+
+            <a href="index.html" class="text-2xl font-bold text-blue-600">
+                GigHub
+            </a>
+
+            <div class="hidden md:flex items-center gap-8 text-sm font-medium">
+                <a href="gigs.html" class="hover:text-blue-600">Explore</a>
+                <a href="#" class="hover:text-blue-600">Categories</a>
+                <a href="#" class="hover:text-blue-600">How It Works</a>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <a href="login.html" class="text-sm font-medium hover:text-blue-600">
+                    Login
+                </a>
+
+                <a href="register.html"
+                    class="bg-blue-600 text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-blue-700">
+                    Join GigHub
+                </a>
+            </div>
+
+        </div>
+    </nav>
+
+
+    <!-- Main Section -->
+    <section class="bg-white">
+        <div class="max-w-7xl mx-auto px-6 py-20">
+
+            <div class="max-w-3xl mx-auto text-center">
+
+                <span class="inline-block bg-blue-50 text-blue-600 px-4 py-2 rounded-full text-sm font-medium mb-6">
+                    Connect. Create. Grow.
+                </span>
+
+                <h1 class="text-5xl md:text-6xl font-bold leading-tight mb-6">
+                    Find the right talent
+                    <span class="text-blue-600"> for your next project.</span>
+                </h1>
+
+                <p class="text-gray-600 text-lg leading-relaxed mb-10">
+                    Hire skilled freelancers for design, development, writing,
+                    marketing and everything in between.
+                </p>
+
+                <!-- Search -->
+                <div class="bg-white border rounded-xl shadow-lg p-2 flex max-w-2xl mx-auto">
+
+                    <input
+                        type="text"
+                        placeholder="What service are you looking for?"
+                        class="flex-1 px-4 py-3 outline-none text-gray-700">
+
+                    <button
+                        class="bg-blue-600 text-white px-7 py-3 rounded-lg font-medium hover:bg-blue-700">
+                        Search
+                    </button>
+
+                </div>
+
+                <div class="mt-6 text-sm text-gray-500">
+                    Popular:
+                    <span class="text-gray-700 ml-2">Web Development</span>
+                    <span class="text-gray-700 ml-4">Logo Design</span>
+                    <span class="text-gray-700 ml-4">SEO</span>
+                    <span class="text-gray-700 ml-4">Video Editing</span>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <section class="py-16">
+        <div class="max-w-7xl mx-auto px-6">
+
+            <div class="flex items-end justify-between mb-8">
+                <div>
+                    <p class="text-blue-600 font-medium mb-2">Explore</p>
+
+                    <h2 class="text-3xl font-bold">
+                        Popular Categories
+                    </h2>
+                </div>
+
+                <a href="gigs.html" class="text-blue-600 font-medium text-sm hover:underline">
+                    View all
+                </a>
+            </div>
+
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
+
+                <div class="bg-white border rounded-xl p-6 hover:shadow-md transition cursor-pointer">
+                    <div class="text-3xl mb-4">💻</div>
+                    <h3 class="font-semibold mb-1">Programming</h3>
+                    <p class="text-sm text-gray-500">1,200+ services</p>
+                </div>
+
+                <div class="bg-white border rounded-xl p-6 hover:shadow-md transition cursor-pointer">
+                    <div class="text-3xl mb-4">🎨</div>
+                    <h3 class="font-semibold mb-1">Design</h3>
+                    <p class="text-sm text-gray-500">950+ services</p>
+                </div>
+
+                <div class="bg-white border rounded-xl p-6 hover:shadow-md transition cursor-pointer">
+                    <div class="text-3xl mb-4">📱</div>
+                    <h3 class="font-semibold mb-1">Marketing</h3>
+                    <p class="text-sm text-gray-500">780+ services</p>
+                </div>
+
+                <div class="bg-white border rounded-xl p-6 hover:shadow-md transition cursor-pointer">
+                    <div class="text-3xl mb-4">🎥</div>
+                    <h3 class="font-semibold mb-1">Video & Animation</h3>
+                    <p class="text-sm text-gray-500">620+ services</p>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <section class="bg-white py-16">
+        <div class="max-w-7xl mx-auto px-6">
+
+            <div class="flex items-end justify-between mb-8">
+                <div>
+                    <p class="text-blue-600 font-medium mb-2">Top Picks</p>
+
+                    <h2 class="text-3xl font-bold">
+                        Featured Gigs
+                    </h2>
+                </div>
+
+                <a href="gigs.html" class="text-blue-600 font-medium text-sm hover:underline">
+                    Explore all
+                </a>
+            </div>
+
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+                <div class="bg-white border rounded-xl overflow-hidden hover:shadow-lg transition">
+
+                    <div class="h-44 bg-gray-200 flex items-center justify-center text-gray-400">
+                        Gig Image
+                    </div>
+
+                    <div class="p-5">
+
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                                👨‍💻
+                            </div>
+
+                            <span class="text-sm font-medium">
+                                Hussain
+                            </span>
+                        </div>
+
+                        <h3 class="font-semibold leading-6 mb-3">
+                            I will build a modern responsive website
+                        </h3>
+
+                        <div class="text-sm mb-4">
+                            <span class="text-yellow-500">★</span>
+                            <span class="font-medium">4.9</span>
+                            <span class="text-gray-400">(124)</span>
+                        </div>
+
+                        <div class="border-t pt-4 flex justify-between items-center">
+                            <span class="text-xs text-gray-500">
+                                Starting at
+                            </span>
+
+                            <span class="font-bold text-lg">
+                                ₹1000
+                            </span>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="bg-white border rounded-xl overflow-hidden hover:shadow-lg transition">
+
+                    <div class="h-44 bg-gray-200 flex items-center justify-center text-gray-400">
+                        Gig Image
+                    </div>
+
+                    <div class="p-5">
+
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
+                                🎨
+                            </div>
+
+                            <span class="text-sm font-medium">
+                                Hanuman Choudhary
+                            </span>
+                        </div>
+
+                        <h3 class="font-semibold leading-6 mb-3">
+                            I will design a professional modern logo
+                        </h3>
+
+                        <div class="text-sm mb-4">
+                            <span class="text-yellow-500">★</span>
+                            <span class="font-medium">5.0</span>
+                            <span class="text-gray-400">(89)</span>
+                        </div>
+
+                        <div class="border-t pt-4 flex justify-between items-center">
+                            <span class="text-xs text-gray-500">
+                                Starting at
+                            </span>
+
+                            <span class="font-bold text-lg">
+                                ₹500
+                            </span>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div class="bg-white border rounded-xl overflow-hidden hover:shadow-lg transition">
+
+                    <div class="h-44 bg-gray-200 flex items-center justify-center text-gray-400">
+                        Gig Image
+                    </div>
+
+                    <div class="p-5">
+
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                                📈
+                            </div>
+
+                            <span class="text-sm font-medium">
+                                Hitesh Kumar
+                            </span>
+                        </div>
+
+                        <h3 class="font-semibold leading-6 mb-3">
+                            I will create a complete SEO strategy
+                        </h3>
+
+                        <div class="text-sm mb-4">
+                            <span class="text-yellow-500">★</span>
+                            <span class="font-medium">4.8</span>
+                            <span class="text-gray-400">(67)</span>
+                        </div>
+
+                        <div class="border-t pt-4 flex justify-between items-center">
+                            <span class="text-xs text-gray-500">
+                                Starting at
+                            </span>
+
+                            <span class="font-bold text-lg">
+                                ₹800
+                            </span>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="bg-white border rounded-xl overflow-hidden hover:shadow-lg transition">
+
+                    <div class="h-44 bg-gray-200 flex items-center justify-center text-gray-400">
+                        Gig Image
+                    </div>
+
+                    <div class="p-5">
+
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center">
+                                🎬
+                            </div>
+
+                            <span class="text-sm font-medium">
+                                Hitesh Sharma
+                            </span>
+                        </div>
+
+                        <h3 class="font-semibold leading-6 mb-3">
+                            I will edit professional videos for you
+                        </h3>
+
+                        <div class="text-sm mb-4">
+                            <span class="text-yellow-500">★</span>
+                            <span class="font-medium">4.9</span>
+                            <span class="text-gray-400">(103)</span>
+                        </div>
+
+                        <div class="border-t pt-4 flex justify-between items-center">
+                            <span class="text-xs text-gray-500">
+                                Starting at
+                            </span>
+
+                            <span class="font-bold text-lg">
+                                ₹1,200
+                            </span>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+
+    <section class="py-16">
+        <div class="max-w-7xl mx-auto px-6">
+
+            <div class="text-center mb-12">
+                <p class="text-blue-600 font-medium mb-2">
+                    Simple Process
+                </p>
+
+                <h2 class="text-3xl font-bold">
+                    How GigHub Works
+                </h2>
+            </div>
+
+
+            <div class="grid md:grid-cols-3 gap-8">
+
+                <div class="text-center">
+                    <div class="w-14 h-14 mx-auto bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xl font-bold mb-5">
+                        1
+                    </div>
+
+                    <h3 class="font-semibold text-lg mb-2">
+                        Find a Service
+                    </h3>
+
+                    <p class="text-gray-500 text-sm leading-6">
+                        Browse thousands of services and find the right freelancer for your project.
+                    </p>
+                </div>
+
+
+                <div class="text-center">
+                    <div class="w-14 h-14 mx-auto bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xl font-bold mb-5">
+                        2
+                    </div>
+
+                    <h3 class="font-semibold text-lg mb-2">
+                        Place an Order
+                    </h3>
+
+                    <p class="text-gray-500 text-sm leading-6">
+                        Choose a package, communicate with the freelancer and place your order.
+                    </p>
+                </div>
+
+
+                <div class="text-center">
+                    <div class="w-14 h-14 mx-auto bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xl font-bold mb-5">
+                        3
+                    </div>
+
+                    <h3 class="font-semibold text-lg mb-2">
+                        Get Your Work
+                    </h3>
+
+                    <p class="text-gray-500 text-sm leading-6">
+                        Receive your completed work and leave a review for the freelancer.
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+
+    <section class="bg-blue-600">
+        <div class="max-w-7xl mx-auto px-6 py-16 text-center text-white">
+
+            <h2 class="text-3xl font-bold mb-4">
+                Ready to start your next project?
+            </h2>
+
+            <p class="text-blue-100 mb-8">
+                Find talented freelancers and get your work done.
+            </p>
+
+            <a href="gigs.html"
+                class="inline-block bg-white text-blue-600 px-7 py-3 rounded-lg font-semibold hover:bg-gray-100">
+                Explore Gigs
+            </a>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400">
+
+        <div class="max-w-7xl mx-auto px-6 py-12">
+
+            <div class="grid md:grid-cols-4 gap-10">
+
+                <div>
+                    <h3 class="text-white text-xl font-bold mb-4">
+                        GigHub
+                    </h3>
+
+                    <p class="text-sm leading-6">
+                        A simple marketplace connecting talented freelancers
+                        with people and businesses around the world.
+                    </p>
+                </div>
+
+
+                <div>
+                    <h4 class="text-white font-semibold mb-4">
+                        Platform
+                    </h4>
+
+                    <div class="space-y-3 text-sm">
+                        <a href="gigs.html" class="block hover:text-white">Explore Gigs</a>
+                        <a href="#" class="block hover:text-white">Categories</a>
+                        <a href="#" class="block hover:text-white">How It Works</a>
+                    </div>
+                </div>
+
+
+                <div>
+                    <h4 class="text-white font-semibold mb-4">
+                        For Freelancers
+                    </h4>
+
+                    <div class="space-y-3 text-sm">
+                        <a href="#" class="block hover:text-white">Become a Seller</a>
+                        <a href="#" class="block hover:text-white">Create a Gig</a>
+                        <a href="#" class="block hover:text-white">Seller Dashboard</a>
+                    </div>
+                </div>
+
+
+                <div>
+                    <h4 class="text-white font-semibold mb-4">
+                        Support
+                    </h4>
+
+                    <div class="space-y-3 text-sm">
+                        <a href="#" class="block hover:text-white">Help Center</a>
+                        <a href="#" class="block hover:text-white">Contact Us</a>
+                        <a href="#" class="block hover:text-white">Terms & Privacy</a>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="border-t border-gray-800 mt-10 pt-6 text-sm text-center">
+                © 2026 GigHub. All rights reserved.
+            </div>
+
+        </div>
+
+    </footer>
+
+</body>
+
+</html>
