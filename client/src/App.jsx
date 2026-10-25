@@ -1,10 +1,18 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+
+import Home from './pages/Home'
+import Login from './pages/Login'
+import Register from './pages/Register'
+
 function App() {
   return (
-    <div className="min-h-screen bg-indigo-50 flex items-center justify-center">
-      <h1 className="text-4xl font-bold text-indigo-700">
-        Welcome to GiGHire
-      </h1>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
