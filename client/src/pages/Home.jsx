@@ -1,136 +1,148 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import Button from "../components/Button";
 
 const categories = [
-  { icon: '🏠', name: 'Household Works', count: '850+ services' },
-  { icon: '🔧', name: 'Repairing / Fixing', count: '720+ services' },
-  { icon: '🚿', name: 'Plumbing', count: '530+ services' },
-  { icon: '🎪', name: 'Event Volunteering', count: '410+ services' },
-  { icon: '💝', name: 'Charity Events', count: '340+ services' },
-  { icon: '💻', name: 'Programming', count: '1,200+ services' },
-  { icon: '🎨', name: 'Design', count: '950+ services' },
-  { icon: '🎥', name: 'Video & Animation', count: '620+ services' },
-]
+  { icon: "🏠", name: "Household Works", count: "850+ services" },
+  { icon: "🔧", name: "Repairing / Fixing", count: "720+ services" },
+  { icon: "🚿", name: "Plumbing", count: "530+ services" },
+  { icon: "🎪", name: "Event Volunteering", count: "410+ services" },
+  { icon: "💝", name: "Charity Events", count: "340+ services" },
+  { icon: "💻", name: "Programming", count: "1,200+ services" },
+  { icon: "🎨", name: "Design", count: "950+ services" },
+  { icon: "🎥", name: "Video & Animation", count: "620+ services" },
+];
 
 const gigs = [
   {
-    icon: '🏠',
-    iconStyle: 'bg-amber-100',
-    seller: 'Ramesh Yadav',
-    title: 'I will do household cleaning and organizing work',
-    rating: '4.8',
+    icon: "🏠",
+    iconStyle: "bg-amber-100",
+    seller: "Ramesh Yadav",
+    title: "I will do household cleaning and organizing work",
+    rating: "4.8",
     reviews: 95,
-    price: '₹400',
-    category: 'Household Works',
+    price: "₹400",
+    category: "Household Works",
   },
   {
-    icon: '🔧',
-    iconStyle: 'bg-red-100',
-    seller: 'Sunil Verma',
-    title: 'I will fix and repair your appliances at home',
-    rating: '4.9',
+    icon: "🔧",
+    iconStyle: "bg-red-100",
+    seller: "Sunil Verma",
+    title: "I will fix and repair your appliances at home",
+    rating: "4.9",
     reviews: 112,
-    price: '₹500',
-    category: 'Repairing / Fixing',
+    price: "₹500",
+    category: "Repairing / Fixing",
   },
   {
-    icon: '🚿',
-    iconStyle: 'bg-blue-100',
-    seller: 'Manoj Sharma',
-    title: 'I will handle all plumbing and pipe fitting work',
-    rating: '5.0',
+    icon: "🚿",
+    iconStyle: "bg-blue-100",
+    seller: "Manoj Sharma",
+    title: "I will handle all plumbing and pipe fitting work",
+    rating: "5.0",
     reviews: 78,
-    price: '₹600',
-    category: 'Plumbing',
+    price: "₹600",
+    category: "Plumbing",
   },
   {
-    icon: '🎪',
-    iconStyle: 'bg-purple-100',
-    seller: 'Priya Gupta',
-    title: 'I will volunteer and manage your events',
-    rating: '4.7',
+    icon: "🎪",
+    iconStyle: "bg-purple-100",
+    seller: "Priya Gupta",
+    title: "I will volunteer and manage your events",
+    rating: "4.7",
     reviews: 64,
-    price: '₹300',
-    category: 'Event Volunteering',
+    price: "₹300",
+    category: "Event Volunteering",
   },
   {
-    icon: '💝',
-    iconStyle: 'bg-pink-100',
-    seller: 'Anjali Singh',
-    title: 'I will organize and coordinate charity events',
-    rating: '4.9',
+    icon: "💝",
+    iconStyle: "bg-pink-100",
+    seller: "Anjali Singh",
+    title: "I will organize and coordinate charity events",
+    rating: "4.9",
     reviews: 53,
-    price: '₹350',
-    category: 'Charity Events',
+    price: "₹350",
+    category: "Charity Events",
   },
   {
-    icon: '👨‍💻',
-    iconStyle: 'bg-blue-100',
-    seller: 'Hussain',
-    title: 'I will build a modern responsive website',
-    rating: '4.9',
+    icon: "👨‍💻",
+    iconStyle: "bg-blue-100",
+    seller: "Hussain",
+    title: "I will build a modern responsive website",
+    rating: "4.9",
     reviews: 124,
-    price: '₹1000',
-    category: 'Programming',
+    price: "₹1000",
+    category: "Programming",
   },
   {
-    icon: '🎨',
-    iconStyle: 'bg-purple-100',
-    seller: 'Hanuman Choudhary',
-    title: 'I will design a professional modern logo',
-    rating: '5.0',
+    icon: "🎨",
+    iconStyle: "bg-purple-100",
+    seller: "Hanuman Choudhary",
+    title: "I will design a professional modern logo",
+    rating: "5.0",
     reviews: 89,
-    price: '₹500',
-    category: 'Design',
+    price: "₹500",
+    category: "Design",
   },
   {
-    icon: '🎬',
-    iconStyle: 'bg-orange-100',
-    seller: 'Hitesh Sharma',
-    title: 'I will edit professional videos for you',
-    rating: '4.9',
+    icon: "🎬",
+    iconStyle: "bg-orange-100",
+    seller: "Hitesh Sharma",
+    title: "I will edit professional videos for you",
+    rating: "4.9",
     reviews: 103,
-    price: '₹1,200',
-    category: 'Video & Animation',
+    price: "₹1,200",
+    category: "Video & Animation",
   },
-]
+];
 
 function Home() {
-  const [search, setSearch] = useState('')
+  const [search, setSearch] = useState("");
 
   const filteredGigs = gigs.filter((gig) => {
-    const query = search.trim().toLowerCase()
+    const query = search.trim().toLowerCase();
     return (
       gig.title.toLowerCase().includes(query) ||
       gig.category.toLowerCase().includes(query) ||
       gig.seller.toLowerCase().includes(query)
-    )
-  })
+    );
+  });
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-blue-50 to-violet-100 text-gray-900">
       {/* Navbar */}
       <nav className="border-b bg-white">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-          <Link to="/" className="text-2xl font-extrabold tracking-tight text-indigo-700">
+          <Link
+            to="/"
+            className="text-2xl font-extrabold tracking-tight text-indigo-700"
+          >
             GiG<span className="text-gray-900">Hire</span>
           </Link>
 
           <div className="hidden items-center gap-8 text-sm font-medium md:flex">
-            <a href="#featured-gigs" className="hover:text-blue-600">Explore</a>
-            <a href="#categories" className="hover:text-blue-600">Categories</a>
-            <a href="#how-it-works" className="hover:text-blue-600">How It Works</a>
+            <a href="#featured-gigs" className="hover:text-blue-600">
+              Explore
+            </a>
+            <a href="#categories" className="hover:text-blue-600">
+              Categories
+            </a>
+            <a href="#how-it-works" className="hover:text-blue-600">
+              How It Works
+            </a>
           </div>
 
           <div className="flex items-center gap-4">
-            <Link to="/login" className="text-sm font-medium hover:text-blue-600">
+            <Link
+              to="/login"
+              className="text-sm font-medium hover:text-blue-600"
+            >
               Login
             </Link>
-            <Link
-              to="/register"
-              className="rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-700"
-            >
-              Join GiGHire
+            <Link to="/register">
+              <Button className="bg-blue-600 px-5 py-2.5 text-sm font-medium hover:bg-blue-700">
+                Join GiGHire
+              </Button>
             </Link>
           </div>
         </div>
@@ -150,15 +162,17 @@ function Home() {
             </h1>
 
             <p className="mb-10 text-lg leading-relaxed text-gray-600">
-              Hire skilled workers for household help, repairs, plumbing,
-              event volunteering, charity work and everything in between.
+              Hire skilled workers for household help, repairs, plumbing, event
+              volunteering, charity work and everything in between.
             </p>
 
             <form
               className="mx-auto flex max-w-2xl rounded-xl border bg-white p-2 shadow-lg"
               onSubmit={(event) => {
-                event.preventDefault()
-                document.getElementById('featured-gigs')?.scrollIntoView({ behavior: 'smooth' })
+                event.preventDefault();
+                document
+                  .getElementById("featured-gigs")
+                  ?.scrollIntoView({ behavior: "smooth" });
               }}
             >
               <input
@@ -178,10 +192,34 @@ function Home() {
 
             <div className="mt-6 text-sm text-gray-500">
               Popular:
-              <button type="button" onClick={() => setSearch('Household Works')} className="ml-2 text-gray-700 hover:text-blue-600">Household Help</button>
-              <button type="button" onClick={() => setSearch('Plumbing')} className="ml-4 text-gray-700 hover:text-blue-600">Plumbing</button>
-              <button type="button" onClick={() => setSearch('Repairing')} className="ml-4 text-gray-700 hover:text-blue-600">Repairs</button>
-              <button type="button" onClick={() => setSearch('Event Volunteering')} className="ml-4 text-gray-700 hover:text-blue-600">Event Volunteering</button>
+              <button
+                type="button"
+                onClick={() => setSearch("Household Works")}
+                className="ml-2 text-gray-700 hover:text-blue-600"
+              >
+                Household Help
+              </button>
+              <button
+                type="button"
+                onClick={() => setSearch("Plumbing")}
+                className="ml-4 text-gray-700 hover:text-blue-600"
+              >
+                Plumbing
+              </button>
+              <button
+                type="button"
+                onClick={() => setSearch("Repairing")}
+                className="ml-4 text-gray-700 hover:text-blue-600"
+              >
+                Repairs
+              </button>
+              <button
+                type="button"
+                onClick={() => setSearch("Event Volunteering")}
+                className="ml-4 text-gray-700 hover:text-blue-600"
+              >
+                Event Volunteering
+              </button>
             </div>
           </div>
         </div>
@@ -195,7 +233,10 @@ function Home() {
               <p className="mb-2 font-medium text-blue-600">Explore</p>
               <h2 className="text-3xl font-bold">Popular Categories</h2>
             </div>
-            <a href="#featured-gigs" className="text-sm font-medium text-blue-600 hover:underline">
+            <a
+              href="#featured-gigs"
+              className="text-sm font-medium text-blue-600 hover:underline"
+            >
               View all
             </a>
           </div>
@@ -206,8 +247,10 @@ function Home() {
                 type="button"
                 key={category.name}
                 onClick={() => {
-                  setSearch(category.name)
-                  document.getElementById('featured-gigs')?.scrollIntoView({ behavior: 'smooth' })
+                  setSearch(category.name);
+                  document
+                    .getElementById("featured-gigs")
+                    ?.scrollIntoView({ behavior: "smooth" });
                 }}
                 className="cursor-pointer rounded-xl border bg-white p-6 text-left transition hover:shadow-md"
               >
@@ -229,7 +272,9 @@ function Home() {
               <h2 className="text-3xl font-bold">Featured Gigs</h2>
             </div>
             <span className="text-sm text-gray-500">
-              {search.trim() ? `${filteredGigs.length} result(s)` : 'Explore our services'}
+              {search.trim()
+                ? `${filteredGigs.length} result(s)`
+                : "Explore our services"}
             </span>
           </div>
 
@@ -246,13 +291,17 @@ function Home() {
 
                   <div className="p-5">
                     <div className="mb-3 flex items-center gap-2">
-                      <div className={`flex h-8 w-8 items-center justify-center rounded-full ${gig.iconStyle}`}>
+                      <div
+                        className={`flex h-8 w-8 items-center justify-center rounded-full ${gig.iconStyle}`}
+                      >
                         {gig.icon}
                       </div>
                       <span className="text-sm font-medium">{gig.seller}</span>
                     </div>
 
-                    <h3 className="mb-3 leading-6 font-semibold">{gig.title}</h3>
+                    <h3 className="mb-3 leading-6 font-semibold">
+                      {gig.title}
+                    </h3>
 
                     <div className="mb-4 text-sm">
                       <span className="text-yellow-500">★</span>
@@ -271,10 +320,12 @@ function Home() {
           ) : (
             <div className="rounded-xl border border-dashed p-10 text-center">
               <p className="font-semibold">No gigs found</p>
-              <p className="mt-2 text-sm text-gray-500">Try another service or clear your search.</p>
+              <p className="mt-2 text-sm text-gray-500">
+                Try another service or clear your search.
+              </p>
               <button
                 type="button"
-                onClick={() => setSearch('')}
+                onClick={() => setSearch("")}
                 className="mt-4 rounded-lg bg-blue-600 px-5 py-2 text-white hover:bg-blue-700"
               >
                 Clear search
@@ -295,19 +346,22 @@ function Home() {
           <div className="grid gap-8 md:grid-cols-3">
             {[
               {
-                number: '1',
-                title: 'Find a Service',
-                description: 'Browse thousands of services and find the right freelancer for your project.',
+                number: "1",
+                title: "Find a Service",
+                description:
+                  "Browse thousands of services and find the right freelancer for your project.",
               },
               {
-                number: '2',
-                title: 'Place an Order',
-                description: 'Choose a package, communicate with the freelancer and place your order.',
+                number: "2",
+                title: "Place an Order",
+                description:
+                  "Choose a package, communicate with the freelancer and place your order.",
               },
               {
-                number: '3',
-                title: 'Get Your Work',
-                description: 'Receive your completed work and leave a review for the freelancer.',
+                number: "3",
+                title: "Get Your Work",
+                description:
+                  "Receive your completed work and leave a review for the freelancer.",
               },
             ].map((step) => (
               <div key={step.number} className="text-center">
@@ -315,7 +369,9 @@ function Home() {
                   {step.number}
                 </div>
                 <h3 className="mb-2 text-lg font-semibold">{step.title}</h3>
-                <p className="text-sm leading-6 text-gray-500">{step.description}</p>
+                <p className="text-sm leading-6 text-gray-500">
+                  {step.description}
+                </p>
               </div>
             ))}
           </div>
@@ -325,8 +381,12 @@ function Home() {
       {/* Call to Action */}
       <section className="bg-blue-600">
         <div className="mx-auto max-w-7xl px-6 py-16 text-center text-white">
-          <h2 className="mb-4 text-3xl font-bold">Ready to start your next project?</h2>
-          <p className="mb-8 text-blue-100">Find talented freelancers and get your work done.</p>
+          <h2 className="mb-4 text-3xl font-bold">
+            Ready to start your next project?
+          </h2>
+          <p className="mb-8 text-blue-100">
+            Find talented freelancers and get your work done.
+          </p>
           <a
             href="#featured-gigs"
             className="inline-block rounded-lg bg-white px-7 py-3 font-semibold text-blue-600 hover:bg-gray-100"
@@ -343,34 +403,56 @@ function Home() {
             <div>
               <h3 className="mb-4 text-xl font-bold text-white">GiGHire</h3>
               <p className="text-sm leading-6">
-                A simple marketplace connecting talented freelancers with people and businesses around the world.
+                A simple marketplace connecting talented freelancers with people
+                and businesses around the world.
               </p>
             </div>
 
             <div>
               <h4 className="mb-4 font-semibold text-white">Platform</h4>
               <div className="space-y-3 text-sm">
-                <a href="#featured-gigs" className="block hover:text-white">Explore Gigs</a>
-                <a href="#categories" className="block hover:text-white">Categories</a>
-                <a href="#how-it-works" className="block hover:text-white">How It Works</a>
+                <a href="#featured-gigs" className="block hover:text-white">
+                  Explore Gigs
+                </a>
+                <a href="#categories" className="block hover:text-white">
+                  Categories
+                </a>
+                <a href="#how-it-works" className="block hover:text-white">
+                  How It Works
+                </a>
               </div>
             </div>
 
             <div>
               <h4 className="mb-4 font-semibold text-white">For Freelancers</h4>
               <div className="space-y-3 text-sm">
-                <Link to="/register" className="block hover:text-white">Become a Seller</Link>
-                <Link to="/register" className="block hover:text-white">Create a Gig</Link>
-                <Link to="/login" className="block hover:text-white">Seller Dashboard</Link>
+                <Link to="/register" className="block hover:text-white">
+                  Become a Seller
+                </Link>
+                <Link to="/register" className="block hover:text-white">
+                  Create a Gig
+                </Link>
+                <Link to="/login" className="block hover:text-white">
+                  Seller Dashboard
+                </Link>
               </div>
             </div>
 
             <div>
               <h4 className="mb-4 font-semibold text-white">Support</h4>
               <div className="space-y-3 text-sm">
-                <a href="#how-it-works" className="block hover:text-white">Help Center</a>
-                <a href="mailto:support@gighire.example" className="block hover:text-white">Contact Us</a>
-                <a href="#how-it-works" className="block hover:text-white">Terms &amp; Privacy</a>
+                <a href="#how-it-works" className="block hover:text-white">
+                  Help Center
+                </a>
+                <a
+                  href="mailto:support@gighire.example"
+                  className="block hover:text-white"
+                >
+                  Contact Us
+                </a>
+                <a href="#how-it-works" className="block hover:text-white">
+                  Terms &amp; Privacy
+                </a>
               </div>
             </div>
           </div>
@@ -381,7 +463,7 @@ function Home() {
         </div>
       </footer>
     </div>
-  )
+  );
 }
 
-export default Home
+export default Home;
