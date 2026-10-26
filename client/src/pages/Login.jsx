@@ -1,19 +1,28 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 
 function Login() {
+  const navigate = useNavigate()
+  const { login } = useAuth()
+  const location = useLocation()
+
   const [role, setRole] = useState('client')
   const [showPassword, setShowPassword] = useState(false)
-  const [email, setEmail] = useState('')
+    const [email, setEmail] = useState(
+    location.state?.registeredEmail || ''
+  )
+
   const [password, setPassword] = useState('')
   const [message, setMessage] = useState(null)
+  const [loading, setLoading] = useState(false)
 
   function handleRoleChange(selectedRole) {
     setRole(selectedRole)
     setMessage(null)
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault()
 
     if (!email.trim() || !password) {
@@ -24,10 +33,48 @@ function Login() {
       return
     }
 
-    setMessage({
-      type: 'info',
-      text: `Form validated. Selected role: ${role}. Login is not connected yet; the backend must verify your credentials.`,
-    })
+    try {
+      setLoading(true)
+      setMessage(null)
+
+      const response = await fetch('http://localhost:5000/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: email.trim().toLowerCase(),
+          password,
+          role,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        setMessage({
+          type: 'error',
+          text: data.message || 'Login failed. Please try again.',
+        })
+        return
+      }
+
+      login(data.user, data.token)
+      
+      setMessage({
+        type: 'success',
+        text: 'Login successful! Redirecting...',
+      })
+
+      navigate('/')
+    } catch {
+      setMessage({
+        type: 'error',
+        text: 'Cannot connect to the server. Please check that the backend is running.',
+      })
+    } finally {
+      setLoading(false)
+    }
   }
 
   function handleForgotPassword(event) {
@@ -241,7 +288,9 @@ function Login() {
                     className={`rounded-xl p-3 text-sm ${
                       message.type === 'error'
                         ? 'bg-red-50 text-red-700'
-                        : 'bg-blue-50 text-blue-700'
+                        : message.type === 'success'
+                          ? 'bg-green-50 text-green-700'
+                          : 'bg-blue-50 text-blue-700'
                     }`}
                   >
                     {message.text}
@@ -250,9 +299,10 @@ function Login() {
 
                 <button
                   type="submit"
-                  className="w-full py-3.5 rounded-xl bg-indigo-600 text-white font-semibold shadow-lg shadow-indigo-200 hover:bg-indigo-700 active:scale-[0.99] transition"
+                  disabled={loading}
+                  className="w-full py-3.5 rounded-xl bg-indigo-600 text-white font-semibold shadow-lg shadow-indigo-200 hover:bg-indigo-700 active:scale-[0.99] transition disabled:opacity-60 disabled:cursor-not-allowed"
                 >
-                  Sign in
+                  {loading ? 'Signing in...' : 'Sign in'}
                 </button>
               </form>
 

@@ -1,5 +1,6 @@
+
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Register() {
   const [role, setRole] = useState("client");
@@ -9,26 +10,71 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (event) => {
+  const navigate = useNavigate();
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    setMessage("");
+    setMessageType("");
 
-    if (!fullName.trim() || !email.trim() || !password || !confirmPassword) {
-      setMessage("Please fill in all fields.");
-      return;
-    }
     if (password.length < 8) {
       setMessage("Password must be at least 8 characters long.");
-      return;
-    }
-    if (password !== confirmPassword) {
-      setMessage("Passwords do not match.");
+      setMessageType("error");
       return;
     }
 
-    setMessage(
-      `Your ${role} account form is valid. Account creation is not connected yet.`
-    );
+    if (password !== confirmPassword) {
+      setMessage("Passwords do not match.");
+      setMessageType("error");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const response = await fetch(
+        "http://localhost:5000/api/auth/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: fullName.trim(),
+            email: email.trim().toLowerCase(),
+            password,
+            role,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Registration failed.");
+      }
+
+      setMessage("Account created successfully! Redirecting to sign in...");
+      setMessageType("success");
+
+      setTimeout(() => {
+        navigate("/login", {
+          state: { registeredEmail: email.trim().toLowerCase() },
+        });
+      }, 1200);
+    } catch (error) {
+      setMessage(
+        error.message === "Failed to fetch"
+          ? "Cannot connect to the server. Please ensure the backend is running."
+          : error.message || "Something went wrong. Please try again."
+      );
+      setMessageType("error");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const roleButtonClass = (buttonRole) =>
@@ -116,15 +162,23 @@ export default function Register() {
                 <div className="flex rounded-xl bg-gray-100 p-1">
                   <button
                     type="button"
-                    onClick={() => { setRole("client"); setMessage(""); }}
+                    onClick={() => {
+                      setRole("client");
+                      setMessage("");
+                    }}
                     className={roleButtonClass("client")}
+                    disabled={loading}
                   >
                     Client
                   </button>
                   <button
                     type="button"
-                    onClick={() => { setRole("worker"); setMessage(""); }}
+                    onClick={() => {
+                      setRole("worker");
+                      setMessage("");
+                    }}
                     className={roleButtonClass("worker")}
+                    disabled={loading}
                   >
                     Worker
                   </button>
@@ -144,6 +198,7 @@ export default function Register() {
                   placeholder="Enter your full name"
                   className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
                   required
+                  disabled={loading}
                 />
               </div>
 
@@ -160,6 +215,7 @@ export default function Register() {
                   placeholder="you@example.com"
                   className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
                   required
+                  disabled={loading}
                 />
               </div>
 
@@ -178,6 +234,7 @@ export default function Register() {
                     className="w-full rounded-xl border border-gray-300 px-4 py-3 pr-20 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
                     minLength={8}
                     required
+                    disabled={loading}
                   />
                   <button
                     type="button"
@@ -202,15 +259,17 @@ export default function Register() {
                   placeholder="Enter your password again"
                   className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
                   required
+                  disabled={loading}
                 />
               </div>
 
               {message && (
                 <p
                   role="status"
+                  aria-live="polite"
                   className={`rounded-lg px-4 py-3 text-sm ${
-                    message.includes("valid.")
-                      ? "bg-blue-50 text-blue-700"
+                    messageType === "success"
+                      ? "bg-green-50 text-green-700"
                       : "bg-red-50 text-red-700"
                   }`}
                 >
@@ -220,9 +279,10 @@ export default function Register() {
 
               <button
                 type="submit"
-                className="w-full rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 px-4 py-3.5 font-bold text-white shadow-lg transition hover:-translate-y-0.5 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-indigo-200"
+                disabled={loading}
+                className="w-full rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 px-4 py-3.5 font-bold text-white shadow-lg transition hover:-translate-y-0.5 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-indigo-200 disabled:cursor-not-allowed disabled:opacity-60"
               >
-                Create account
+                {loading ? "Creating account..." : "Create account"}
               </button>
             </form>
 

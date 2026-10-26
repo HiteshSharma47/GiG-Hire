@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "../components/Button";
+import { useAuth } from "../context/AuthContext";
 
 const categories = [
   { icon: "🏠", name: "Household Works", count: "850+ services" },
@@ -98,6 +99,13 @@ const gigs = [
 
 function Home() {
   const [search, setSearch] = useState("");
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  function handleLogout() {
+    logout();
+    navigate("/");
+  }
 
   const filteredGigs = gigs.filter((gig) => {
     const query = search.trim().toLowerCase();
@@ -133,17 +141,40 @@ function Home() {
           </div>
 
           <div className="flex items-center gap-4">
-            <Link
-              to="/login"
-              className="text-sm font-medium hover:text-blue-600"
-            >
-              Login
-            </Link>
-            <Link to="/register">
-              <Button className="bg-blue-600 px-5 py-2.5 text-sm font-medium hover:bg-blue-700">
-                Join GiGHire
-              </Button>
-            </Link>
+            {user ? (
+              <>
+                <div className="text-right">
+                  <p className="text-sm font-semibold text-gray-800">
+                    {user.name}
+                  </p>
+                  <p className="text-xs capitalize text-gray-500">
+                    {user.role}
+                  </p>
+                </div>
+
+                <Button
+                  onClick={handleLogout}
+                  className="bg-red-600 hover:bg-red-700"
+                >
+                  Logout
+                </Button>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/login"
+                  className="text-sm font-medium hover:text-blue-600"
+                >
+                  Login
+                </Link>
+
+                <Link to="/register">
+                  <Button className="bg-blue-600 px-5 py-2.5 text-sm font-medium hover:bg-blue-700">
+                    Join GiGHire
+                  </Button>
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </nav>
