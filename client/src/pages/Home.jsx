@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "../components/Button";
 import { useAuth } from "../context/AuthContext";
@@ -14,7 +14,7 @@ const categories = [
   { icon: "🎥", name: "Video & Animation", count: "620+ services" },
 ];
 
-const gigs = [
+const demoGigs = [
   {
     icon: "🏠",
     iconStyle: "bg-amber-100",
@@ -97,10 +97,89 @@ const gigs = [
   },
 ];
 
+
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
+const categoryStyles = {
+  "Household Works": { icon: "🏠", iconStyle: "bg-amber-100" },
+  "Repairing / Fixing": { icon: "🔧", iconStyle: "bg-red-100" },
+  Plumbing: { icon: "🚿", iconStyle: "bg-blue-100" },
+  "Event Volunteering": { icon: "🎪", iconStyle: "bg-purple-100" },
+  "Charity Events": { icon: "💝", iconStyle: "bg-pink-100" },
+  Programming: { icon: "👨‍💻", iconStyle: "bg-blue-100" },
+  Design: { icon: "🎨", iconStyle: "bg-purple-100" },
+  "Video & Animation": { icon: "🎬", iconStyle: "bg-orange-100" },
+};
+
+function formatPrice(price) {
+  if (typeof price === "string" && price.includes("₹")) return price;
+  const amount = Number(price);
+  return Number.isFinite(amount) ? `₹${amount.toLocaleString("en-IN")}` : "Price on request";
+}
+
+function normalizeGig(gig) {
+  const category = gig.category || "Other";
+  const style = categoryStyles[category] || { icon: "💼", iconStyle: "bg-indigo-100" };
+  const worker = gig.worker || gig.seller || {};
+  return {
+    ...gig,
+    id: gig._id || gig.id || gig.title,
+    title: gig.title || "Untitled gig",
+    category,
+    seller: typeof worker === "string" ? worker : worker.name || gig.workerName || "GiGHire Worker",
+    price: formatPrice(gig.price),
+    icon: style.icon,
+    iconStyle: style.iconStyle,
+    rating: gig.rating ?? "New",
+    reviews: gig.reviewCount ?? gig.reviews ?? 0,
+  };
+}
+
 function Home() {
   const [search, setSearch] = useState("");
+  const [gigs, setGigs] = useState(demoGigs.map(normalizeGig));
+  const [isLoadingGigs, setIsLoadingGigs] = useState(true);
+  const [usingDemoGigs, setUsingDemoGigs] = useState(false);
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadGigs() {
+      try {
+        const response = await fetch(`${API_URL}/api/gigs`);
+        if (!response.ok) {
+          throw new Error("The gigs API is not available yet.");
+        }
+
+        const data = await response.json();
+        const apiGigs = Array.isArray(data) ? data : data.gigs;
+
+        if (!Array.isArray(apiGigs)) {
+          throw new Error("Unexpected response from the gigs API.");
+        }
+
+        if (isMounted) {
+          setGigs(apiGigs.map(normalizeGig));
+          setUsingDemoGigs(false);
+        }
+      } catch {
+        // Keep the sample cards visible until the backend endpoint is ready.
+        if (isMounted) {
+          setGigs(demoGigs.map(normalizeGig));
+          setUsingDemoGigs(true);
+        }
+      } finally {
+        if (isMounted) setIsLoadingGigs(false);
+      }
+    }
+
+    loadGigs();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   function handleLogout() {
     logout();
@@ -302,18 +381,28 @@ function Home() {
               <p className="mb-2 font-medium text-blue-600">Top Picks</p>
               <h2 className="text-3xl font-bold">Featured Gigs</h2>
             </div>
-            <span className="text-sm text-gray-500">
-              {search.trim()
-                ? `${filteredGigs.length} result(s)`
-                : "Explore our services"}
-            </span>
+            <div className="text-right">
+              <span className="text-sm text-gray-500">
+                {search.trim()
+                  ? `${filteredGigs.length} result(s)`
+                  : "Explore our services"}
+              </span>
+              {isLoadingGigs && (
+                <p className="mt-1 text-xs text-gray-400">Checking for live gigs...</p>
+              )}
+              {!isLoadingGigs && usingDemoGigs && (
+                <p className="mt-1 text-xs text-amber-700">
+                  Showing sample gigs until the API is ready
+                </p>
+              )}
+            </div>
           </div>
 
           {filteredGigs.length > 0 ? (
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
               {filteredGigs.map((gig) => (
                 <article
-                  key={gig.title}
+                  key={gig.id}
                   className="overflow-hidden rounded-xl border bg-white transition hover:shadow-lg"
                 >
                   <div className="flex h-44 items-center justify-center bg-gray-200 text-gray-400">
