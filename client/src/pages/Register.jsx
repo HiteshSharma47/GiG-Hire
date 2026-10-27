@@ -6,9 +6,11 @@ export default function Register() {
   const [role, setRole] = useState("client");
   const [showPassword, setShowPassword] = useState(false);
   const [fullName, setFullName] = useState("");
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("");
   const [loading, setLoading] = useState(false);
