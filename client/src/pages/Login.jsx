@@ -64,12 +64,12 @@ function Login() {
         text: "Login successful! Redirecting...",
       });
 
-      if (data.user.login === "worker") {
+      if (data.user.role === "worker") {
         navigate("/worker-dashboard");
       } else {
-        navigae("/client-dashboard");
+        navigate("/client-dashboard");
       }
-      
+
     } catch {
       setMessage({
         type: "error",

@@ -97,7 +97,6 @@ const demoGigs = [
   },
 ];
 
-
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 const categoryStyles = {
@@ -114,19 +113,27 @@ const categoryStyles = {
 function formatPrice(price) {
   if (typeof price === "string" && price.includes("₹")) return price;
   const amount = Number(price);
-  return Number.isFinite(amount) ? `₹${amount.toLocaleString("en-IN")}` : "Price on request";
+  return Number.isFinite(amount)
+    ? `₹${amount.toLocaleString("en-IN")}`
+    : "Price on request";
 }
 
 function normalizeGig(gig) {
   const category = gig.category || "Other";
-  const style = categoryStyles[category] || { icon: "💼", iconStyle: "bg-indigo-100" };
+  const style = categoryStyles[category] || {
+    icon: "💼",
+    iconStyle: "bg-indigo-100",
+  };
   const worker = gig.worker || gig.seller || {};
   return {
     ...gig,
     id: gig._id || gig.id || gig.title,
     title: gig.title || "Untitled gig",
     category,
-    seller: typeof worker === "string" ? worker : worker.name || gig.workerName || "GiGHire Worker",
+    seller:
+      typeof worker === "string"
+        ? worker
+        : worker.name || gig.workerName || "GiGHire Worker",
     price: formatPrice(gig.price),
     icon: style.icon,
     iconStyle: style.iconStyle,
@@ -181,6 +188,14 @@ function Home() {
     };
   }, []);
 
+  function handleDashboard() {
+    if (user?.role === "worker") {
+      navigate("/worker-dashboard");
+    } else if (user?.role === "client") {
+      navigate("/client-dashboard");
+    }
+  }
+
   function handleLogout() {
     logout();
     navigate("/");
@@ -230,6 +245,13 @@ function Home() {
                     {user.role}
                   </p>
                 </div>
+
+                <Button
+                  onClick={handleDashboard}
+                  className="bg-indigo-600 hover:bg-indigo-700"
+                >
+                  Dashboard
+                </Button>
 
                 <Button
                   onClick={handleLogout}
@@ -388,7 +410,9 @@ function Home() {
                   : "Explore our services"}
               </span>
               {isLoadingGigs && (
-                <p className="mt-1 text-xs text-gray-400">Checking for live gigs...</p>
+                <p className="mt-1 text-xs text-gray-400">
+                  Checking for live gigs...
+                </p>
               )}
               {!isLoadingGigs && usingDemoGigs && (
                 <p className="mt-1 text-xs text-amber-700">
