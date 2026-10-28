@@ -1,103 +1,109 @@
-import { useState } from 'react'
-import { useAuth } from '../context/AuthContext'
-import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { useState } from "react";
+import { useAuth } from "../context/AuthContext";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 function Login() {
-  const navigate = useNavigate()
-  const { login } = useAuth()
-  const location = useLocation()
+  const navigate = useNavigate();
+  const { login } = useAuth();
+  const location = useLocation();
 
-  const [role, setRole] = useState('client')
-  const [showPassword, setShowPassword] = useState(false)
-    const [email, setEmail] = useState(
-    location.state?.registeredEmail || ''
-  )
+  const [role, setRole] = useState("client");
+  const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState(location.state?.registeredEmail || "");
 
-  const [password, setPassword] = useState('')
-  const [message, setMessage] = useState(null)
-  const [loading, setLoading] = useState(false)
+  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   function handleRoleChange(selectedRole) {
-    setRole(selectedRole)
-    setMessage(null)
+    setRole(selectedRole);
+    setMessage(null);
   }
 
   async function handleSubmit(event) {
-    event.preventDefault()
+    event.preventDefault();
 
     if (!email.trim() || !password) {
       setMessage({
-        type: 'error',
-        text: 'Please enter your email and password.',
-      })
-      return
+        type: "error",
+        text: "Please enter your email and password.",
+      });
+      return;
     }
 
     try {
-      setLoading(true)
-      setMessage(null)
+      setLoading(true);
+      setMessage(null);
 
-      const response = await fetch('http://localhost:5000/api/auth/login', {
-        method: 'POST',
+      const response = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           email: email.trim().toLowerCase(),
           password,
           role,
         }),
-      })
+      });
 
-      const data = await response.json()
+      const data = await response.json();
 
       if (!response.ok) {
         setMessage({
-          type: 'error',
-          text: data.message || 'Login failed. Please try again.',
-        })
-        return
+          type: "error",
+          text: data.message || "Login failed. Please try again.",
+        });
+        return;
       }
 
-      login(data.user, data.token)
-      
-      setMessage({
-        type: 'success',
-        text: 'Login successful! Redirecting...',
-      })
+      login(data.user, data.token);
 
-      navigate('/')
+      setMessage({
+        type: "success",
+        text: "Login successful! Redirecting...",
+      });
+
+      if (data.user.login === "worker") {
+        navigate("/worker-dashboard");
+      } else {
+        navigae("/client-dashboard");
+      }
+      
     } catch {
       setMessage({
-        type: 'error',
-        text: 'Cannot connect to the server. Please check that the backend is running.',
-      })
+        type: "error",
+        text: "Cannot connect to the server. Please check that the backend is running.",
+      });
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   }
 
   function handleForgotPassword(event) {
-    event.preventDefault()
+    event.preventDefault();
     setMessage({
-      type: 'info',
-      text: 'Password recovery will be available after we connect the backend.',
-    })
+      type: "info",
+      text: "Password recovery will be available after we connect the backend.",
+    });
   }
 
   const roleButtonClass = (selectedRole) =>
     `border-2 rounded-xl p-4 text-left transition ${
       role === selectedRole
-        ? 'border-indigo-600 bg-indigo-50'
-        : 'border-gray-200 hover:border-indigo-300'
-    }`
+        ? "border-indigo-600 bg-indigo-50"
+        : "border-gray-200 hover:border-indigo-300"
+    }`;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-blue-50 to-violet-100 text-gray-900">
       {/* Navbar */}
       <nav className="bg-white/80 backdrop-blur-md border-b border-indigo-100">
         <div className="max-w-7xl mx-auto px-6 py-5 flex justify-between items-center">
-          <Link to="/" className="text-2xl font-extrabold tracking-tight text-indigo-700">
+          <Link
+            to="/"
+            className="text-2xl font-extrabold tracking-tight text-indigo-700"
+          >
             GiG<span className="text-gray-900">Hire</span>
           </Link>
 
@@ -134,7 +140,8 @@ function Login() {
               </h1>
 
               <p className="text-indigo-100 mt-6 leading-7">
-                Find trusted workers for your projects or discover opportunities to turn your skills into meaningful work.
+                Find trusted workers for your projects or discover opportunities
+                to turn your skills into meaningful work.
               </p>
             </div>
 
@@ -144,7 +151,9 @@ function Login() {
                   ✓
                 </div>
                 <div>
-                  <h3 className="font-semibold">One platform, two possibilities</h3>
+                  <h3 className="font-semibold">
+                    One platform, two possibilities
+                  </h3>
                   <p className="text-sm text-indigo-200">
                     Hire talent or offer your services.
                   </p>
@@ -200,9 +209,9 @@ function Login() {
                 <div className="grid grid-cols-2 gap-3">
                   <button
                     type="button"
-                    className={roleButtonClass('client')}
-                    aria-pressed={role === 'client'}
-                    onClick={() => handleRoleChange('client')}
+                    className={roleButtonClass("client")}
+                    aria-pressed={role === "client"}
+                    onClick={() => handleRoleChange("client")}
                   >
                     <span className="text-2xl">👤</span>
                     <span className="block font-semibold mt-2">Client</span>
@@ -213,9 +222,9 @@ function Login() {
 
                   <button
                     type="button"
-                    className={roleButtonClass('worker')}
-                    aria-pressed={role === 'worker'}
-                    onClick={() => handleRoleChange('worker')}
+                    className={roleButtonClass("worker")}
+                    aria-pressed={role === "worker"}
+                    onClick={() => handleRoleChange("worker")}
                   >
                     <span className="text-2xl">🛠️</span>
                     <span className="block font-semibold mt-2">Worker</span>
@@ -229,7 +238,10 @@ function Login() {
               {/* Login Form */}
               <form className="space-y-5" onSubmit={handleSubmit}>
                 <div>
-                  <label htmlFor="email" className="block text-sm font-semibold mb-2">
+                  <label
+                    htmlFor="email"
+                    className="block text-sm font-semibold mb-2"
+                  >
                     Email address
                   </label>
                   <input
@@ -247,7 +259,10 @@ function Login() {
 
                 <div>
                   <div className="flex justify-between items-center mb-2">
-                    <label htmlFor="password" className="block text-sm font-semibold">
+                    <label
+                      htmlFor="password"
+                      className="block text-sm font-semibold"
+                    >
                       Password
                     </label>
                     <a
@@ -261,7 +276,7 @@ function Login() {
 
                   <div className="relative">
                     <input
-                      type={showPassword ? 'text' : 'password'}
+                      type={showPassword ? "text" : "password"}
                       id="password"
                       name="password"
                       placeholder="Enter your password"
@@ -276,7 +291,7 @@ function Login() {
                       onClick={() => setShowPassword(!showPassword)}
                       className="absolute right-4 top-1/2 -translate-y-1/2 text-sm font-semibold text-indigo-600 hover:text-indigo-800"
                     >
-                      {showPassword ? 'Hide' : 'Show'}
+                      {showPassword ? "Hide" : "Show"}
                     </button>
                   </div>
                 </div>
@@ -286,11 +301,11 @@ function Login() {
                     role="status"
                     aria-live="polite"
                     className={`rounded-xl p-3 text-sm ${
-                      message.type === 'error'
-                        ? 'bg-red-50 text-red-700'
-                        : message.type === 'success'
-                          ? 'bg-green-50 text-green-700'
-                          : 'bg-blue-50 text-blue-700'
+                      message.type === "error"
+                        ? "bg-red-50 text-red-700"
+                        : message.type === "success"
+                          ? "bg-green-50 text-green-700"
+                          : "bg-blue-50 text-blue-700"
                     }`}
                   >
                     {message.text}
@@ -302,7 +317,7 @@ function Login() {
                   disabled={loading}
                   className="w-full py-3.5 rounded-xl bg-indigo-600 text-white font-semibold shadow-lg shadow-indigo-200 hover:bg-indigo-700 active:scale-[0.99] transition disabled:opacity-60 disabled:cursor-not-allowed"
                 >
-                  {loading ? 'Signing in...' : 'Sign in'}
+                  {loading ? "Signing in..." : "Sign in"}
                 </button>
               </form>
 
@@ -320,11 +335,11 @@ function Login() {
               </Link>
 
               <p className="text-xs text-center text-gray-400 leading-5 mt-7">
-                By continuing, you agree to GiGHire's{' '}
+                By continuing, you agree to GiGHire's{" "}
                 <a href="#terms" className="underline hover:text-indigo-600">
                   Terms
-                </a>{' '}
-                and{' '}
+                </a>{" "}
+                and{" "}
                 <a href="#privacy" className="underline hover:text-indigo-600">
                   Privacy Policy
                 </a>
@@ -335,7 +350,7 @@ function Login() {
         </div>
       </main>
     </div>
-  )
+  );
 }
 
-export default Login
+export default Login;

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { useAuth } from '/context/AuthContext'
 
 const initialGigs = [
   {
@@ -78,9 +79,10 @@ function WorkerDashboard() {
     }
   }
 
+  const { logout } = useAuth()
+
   function handleLogout() {
-    // For LogOut Logic(Later will get Added)
-    localStorage.removeItem('token')
+    logout()
     navigate('/login')
   }
 
