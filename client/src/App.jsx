@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import WorkerDashboard from "./pages/WorkerDashboard";
+import CreateGig from "./pages/CreateGig"
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
 
           <Route element={<ProtectedRoute allowedRole="worker" />}>
             <Route path="/worker-dashboard" element={<WorkerDashboard />} />
+            <Route path="/create-gig" element={<CreateGig />} />
           </Route>
         </Routes>
       </BrowserRouter>
