@@ -1,21 +1,21 @@
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
+const jwt = require("jsonwebtoken");
+const User = require("../models/User");
 
 async function protect(req, res, next) {
   try {
     const authHeader = req.headers.authorization;
 
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return res.status(401).json({
-        message: 'Authentication required. Please log in.',
+        message: "Authentication required. Please log in.",
       });
     }
 
-    const token = authHeader.split(' ')[1];
+    const token = authHeader.split(" ")[1];
 
     if (!process.env.JWT_SECRET) {
       return res.status(500).json({
-        message: 'Server authentication is not configured.',
+        message: "Server authentication is not configured.",
       });
     }
 
@@ -24,7 +24,7 @@ async function protect(req, res, next) {
 
     if (!user) {
       return res.status(401).json({
-        message: 'User account not found.',
+        message: "User account not found.",
       });
     }
 
@@ -36,29 +36,40 @@ async function protect(req, res, next) {
     next();
   } catch (error) {
     if (
-      error.name === 'JsonWebTokenError' ||
-      error.name === 'TokenExpiredError'
+      error.name === "JsonWebTokenError" ||
+      error.name === "TokenExpiredError"
     ) {
       return res.status(401).json({
-        message: 'Invalid or expired token. Please log in again.',
+        message: "Invalid or expired token. Please log in again.",
       });
     }
 
-    console.error('Authentication error:', error.message);
+    console.error("Authentication error:", error.message);
 
     return res.status(500).json({
-      message: 'Authentication failed.',
+      message: "Authentication failed.",
     });
   }
 }
 
 function workerOnly(req, res, next) {
-  if (req.user.role !== 'worker') {
+  if (req.user.role !== "worker") {
     return res.status(403).json({
-      message: 'Only workers can perform this action.',
+      message: "Only workers can perform this action.",
     });
   }
+
   next();
 }
 
-module.exports = { protect, workerOnly };
+function clientOnly(req, res, next) {
+  if (req.user.role !== "client") {
+    return res.status(403).json({
+      message: "Only clients can perform this action.",
+    });
+  }
+
+  next();
+}
+
+module.exports = { protect, workerOnly, clientOnly };
