@@ -427,7 +427,12 @@ function Home() {
               {filteredGigs.map((gig) => (
                 <article
                   key={gig.id}
-                  className="overflow-hidden rounded-xl border bg-white transition hover:shadow-lg"
+                  onClick={() => {
+                    if (gig._id) {
+                      navigate(`/gig/${gig._id}`);
+                    }
+                  }}
+                  className="cursor-pointer overflow-hidden rounded-xl border bg-white transition hover:-translate-y-1 hover:shadow-lg"
                 >
                   <div className="flex h-44 items-center justify-center bg-gray-200 text-gray-400">
                     Gig Image

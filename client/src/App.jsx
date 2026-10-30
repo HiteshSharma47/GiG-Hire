@@ -5,8 +5,9 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import WorkerDashboard from "./pages/WorkerDashboard";
-import CreateGig from "./pages/CreateGig"
+import CreateGig from "./pages/CreateGig";
 import ProtectedRoute from "./components/ProtectedRoute";
+import GigDetails from "./pages/GigDetails";
 
 function App() {
   return (
@@ -16,7 +17,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-
+          <Route path="/gig/:id" element={<GigDetails />} />
           <Route element={<ProtectedRoute allowedRole="worker" />}>
             <Route path="/worker-dashboard" element={<WorkerDashboard />} />
             <Route path="/create-gig" element={<CreateGig />} />
