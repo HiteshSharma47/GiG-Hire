@@ -3,6 +3,7 @@ const authRoutes = require('./routes/authRoutes');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const gigRoutes = require('./routes/gigRoutes');
+const bookingRoutes = require('./routes/bookingRoutes')
 require('dotenv').config();
 
 const app = express();
@@ -12,6 +13,7 @@ app.use(express.json());
 
 app.use('/api/auth', authRoutes);
 app.use('/api/gigs', gigRoutes);
+app.use("/api/bookings", bookingRoutes);
 
 app.get('/', (req, res) => {
   res.send('GiGHire API is running');
