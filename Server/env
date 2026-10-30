@@ -1,6 +1,0 @@
-PORT=5000
-MONGO_URI=mongodb+srv://hs4245742_db_user:8iZKpq2TtVahuZ0s@hiteshcluster0.sdqkdvz.mongodb.net/gighire?retryWrites=true&w=majority
-JWT_SECRET=messiisandwillbeforevereverthegreatestplayerinthehistoryoffootballandevensports
-EMAIL_USER=hs4245742@gmail.com
-EMAIL_PASS=qegemadwqdiddbmy
-CLIENT_URL=http://localhost:5173
