@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -6,11 +5,11 @@ export default function Register() {
   const [role, setRole] = useState("client");
   const [showPassword, setShowPassword] = useState(false);
   const [fullName, setFullName] = useState("");
-
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  
+
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("");
   const [loading, setLoading] = useState(false);
@@ -34,24 +33,28 @@ export default function Register() {
       return;
     }
 
+    if (role === "worker" && !phone.trim()) {
+      setMessage("Please enter your phone number.");
+      setMessageType("error");
+      return;
+    }
+
     try {
       setLoading(true);
 
-      const response = await fetch(
-        "http://localhost:5000/api/auth/register",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name: fullName.trim(),
-            email: email.trim().toLowerCase(),
-            password,
-            role,
-          }),
-        }
-      );
+      const response = await fetch("http://localhost:5000/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: fullName.trim(),
+          email: email.trim().toLowerCase(),
+          phone: phone.trim(),
+          password,
+          role,
+        }),
+      });
 
       const data = await response.json();
 
@@ -71,7 +74,7 @@ export default function Register() {
       setMessage(
         error.message === "Failed to fetch"
           ? "Cannot connect to the server. Please ensure the backend is running."
-          : error.message || "Something went wrong. Please try again."
+          : error.message || "Something went wrong. Please try again.",
       );
       setMessageType("error");
     } finally {
@@ -89,12 +92,18 @@ export default function Register() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-white to-violet-100 px-4 py-6 sm:px-6 lg:px-8">
       <header className="mx-auto flex w-full max-w-6xl items-center justify-between">
-        <Link to="/" className="text-2xl font-extrabold tracking-tight text-indigo-700">
+        <Link
+          to="/"
+          className="text-2xl font-extrabold tracking-tight text-indigo-700"
+        >
           GiG<span className="text-violet-600">Hire</span>
         </Link>
         <p className="text-sm text-gray-600">
           Already have an account?{" "}
-          <Link to="/login" className="font-semibold text-indigo-700 hover:text-violet-700">
+          <Link
+            to="/login"
+            className="font-semibold text-indigo-700 hover:text-violet-700"
+          >
             Sign in
           </Link>
         </p>
@@ -117,8 +126,8 @@ export default function Register() {
             </p>
             <p className="mt-5 max-w-md leading-7 text-indigo-100/90">
               Whether you are looking for the right talent or searching for your
-              next opportunity, GiGHire helps clients and workers connect, create,
-              and grow together.
+              next opportunity, GiGHire helps clients and workers connect,
+              create, and grow together.
             </p>
           </div>
 
@@ -143,7 +152,10 @@ export default function Register() {
 
         <section className="flex items-center justify-center p-6 sm:p-10 lg:p-12">
           <div className="w-full max-w-md">
-            <Link to="/" className="mb-6 inline-flex text-sm font-medium text-gray-500 hover:text-indigo-700">
+            <Link
+              to="/"
+              className="mb-6 inline-flex text-sm font-medium text-gray-500 hover:text-indigo-700"
+            >
               ← Back to home
             </Link>
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-indigo-600">
@@ -188,7 +200,10 @@ export default function Register() {
               </div>
 
               <div>
-                <label htmlFor="fullName" className="mb-2 block text-sm font-semibold text-gray-700">
+                <label
+                  htmlFor="fullName"
+                  className="mb-2 block text-sm font-semibold text-gray-700"
+                >
                   Full name
                 </label>
                 <input
@@ -205,7 +220,10 @@ export default function Register() {
               </div>
 
               <div>
-                <label htmlFor="email" className="mb-2 block text-sm font-semibold text-gray-700">
+                <label
+                  htmlFor="email"
+                  className="mb-2 block text-sm font-semibold text-gray-700"
+                >
                   Email address
                 </label>
                 <input
@@ -221,8 +239,36 @@ export default function Register() {
                 />
               </div>
 
+              {role === "worker" && (
+                <div>
+                  <label
+                    htmlFor="phone"
+                    className="mb-2 block text-sm font-semibold text-gray-700"
+                  >
+                    Phone number
+                  </label>
+                  <input
+                    id="phone"
+                    type="tel"
+                    autoComplete="tel"
+                    value={phone}
+                    onChange={(event) => setPhone(event.target.value)}
+                    placeholder="e.g. +919876543210"
+                    className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100"
+                    required
+                    disabled={loading}
+                  />
+                  <p className="mt-1 text-xs text-gray-500">
+                    Clients can see this after you accept their booking.
+                  </p>
+                </div>
+              )}
+
               <div>
-                <label htmlFor="password" className="mb-2 block text-sm font-semibold text-gray-700">
+                <label
+                  htmlFor="password"
+                  className="mb-2 block text-sm font-semibold text-gray-700"
+                >
                   Password
                 </label>
                 <div className="relative">
@@ -249,7 +295,10 @@ export default function Register() {
               </div>
 
               <div>
-                <label htmlFor="confirmPassword" className="mb-2 block text-sm font-semibold text-gray-700">
+                <label
+                  htmlFor="confirmPassword"
+                  className="mb-2 block text-sm font-semibold text-gray-700"
+                >
                   Confirm password
                 </label>
                 <input
@@ -290,15 +339,23 @@ export default function Register() {
 
             <p className="mt-6 text-center text-sm text-gray-600">
               Already have an account?{" "}
-              <Link to="/login" className="font-semibold text-indigo-700 hover:text-violet-700">
+              <Link
+                to="/login"
+                className="font-semibold text-indigo-700 hover:text-violet-700"
+              >
                 Sign in
               </Link>
             </p>
             <p className="mt-5 text-center text-xs leading-5 text-gray-400">
               By creating an account, you agree to our{" "}
-              <a href="#terms" className="underline hover:text-indigo-600">Terms of Service</a>
-              {" "}and{" "}
-              <a href="#privacy" className="underline hover:text-indigo-600">Privacy Policy</a>.
+              <a href="#terms" className="underline hover:text-indigo-600">
+                Terms of Service
+              </a>{" "}
+              and{" "}
+              <a href="#privacy" className="underline hover:text-indigo-600">
+                Privacy Policy
+              </a>
+              .
             </p>
           </div>
         </section>
