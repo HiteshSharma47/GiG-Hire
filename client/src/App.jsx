@@ -4,6 +4,9 @@ import { AuthProvider } from "./context/AuthContext";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import ForgotPassword from "./pages/ForgotPassword";
+import VerifyOTP from "./pages/VerifyOTP";
+import ResetPassword from "./pages/ResetPassword";
 import WorkerDashboard from "./pages/WorkerDashboard";
 import CreateGig from "./pages/CreateGig";
 import WorkerProfile from "./pages/WorkerProfile";
@@ -20,6 +23,10 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/gig/:id" element={<GigDetails />} />
+
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/verify-otp" element={<VerifyOTP />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
 
           <Route element={<ProtectedRoute allowedRole="worker" />}>
             <Route path="/worker-dashboard" element={<WorkerDashboard />} />

@@ -69,7 +69,6 @@ function Login() {
       } else {
         navigate("/client-dashboard");
       }
-
     } catch {
       setMessage({
         type: "error",
@@ -78,14 +77,6 @@ function Login() {
     } finally {
       setLoading(false);
     }
-  }
-
-  function handleForgotPassword(event) {
-    event.preventDefault();
-    setMessage({
-      type: "info",
-      text: "Password recovery will be available after we connect the backend.",
-    });
   }
 
   const roleButtonClass = (selectedRole) =>
@@ -265,13 +256,12 @@ function Login() {
                     >
                       Password
                     </label>
-                    <a
-                      href="#forgot-password"
-                      onClick={handleForgotPassword}
+                    <Link
+                      to="/forgot-password"
                       className="text-sm font-medium text-indigo-600 hover:text-indigo-800"
                     >
                       Forgot password?
-                    </a>
+                    </Link>
                   </div>
 
                   <div className="relative">
