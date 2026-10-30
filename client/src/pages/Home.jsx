@@ -14,89 +14,6 @@ const categories = [
   { icon: "🎥", name: "Video & Animation", count: "620+ services" },
 ];
 
-const demoGigs = [
-  {
-    icon: "🏠",
-    iconStyle: "bg-amber-100",
-    seller: "Ramesh Yadav",
-    title: "I will do household cleaning and organizing work",
-    rating: "4.8",
-    reviews: 95,
-    price: "₹400",
-    category: "Household Works",
-  },
-  {
-    icon: "🔧",
-    iconStyle: "bg-red-100",
-    seller: "Sunil Verma",
-    title: "I will fix and repair your appliances at home",
-    rating: "4.9",
-    reviews: 112,
-    price: "₹500",
-    category: "Repairing / Fixing",
-  },
-  {
-    icon: "🚿",
-    iconStyle: "bg-blue-100",
-    seller: "Manoj Sharma",
-    title: "I will handle all plumbing and pipe fitting work",
-    rating: "5.0",
-    reviews: 78,
-    price: "₹600",
-    category: "Plumbing",
-  },
-  {
-    icon: "🎪",
-    iconStyle: "bg-purple-100",
-    seller: "Priya Gupta",
-    title: "I will volunteer and manage your events",
-    rating: "4.7",
-    reviews: 64,
-    price: "₹300",
-    category: "Event Volunteering",
-  },
-  {
-    icon: "💝",
-    iconStyle: "bg-pink-100",
-    seller: "Anjali Singh",
-    title: "I will organize and coordinate charity events",
-    rating: "4.9",
-    reviews: 53,
-    price: "₹350",
-    category: "Charity Events",
-  },
-  {
-    icon: "👨‍💻",
-    iconStyle: "bg-blue-100",
-    seller: "Hussain",
-    title: "I will build a modern responsive website",
-    rating: "4.9",
-    reviews: 124,
-    price: "₹1000",
-    category: "Programming",
-  },
-  {
-    icon: "🎨",
-    iconStyle: "bg-purple-100",
-    seller: "Hanuman Choudhary",
-    title: "I will design a professional modern logo",
-    rating: "5.0",
-    reviews: 89,
-    price: "₹500",
-    category: "Design",
-  },
-  {
-    icon: "🎬",
-    iconStyle: "bg-orange-100",
-    seller: "Hitesh Sharma",
-    title: "I will edit professional videos for you",
-    rating: "4.9",
-    reviews: 103,
-    price: "₹1,200",
-    category: "Video & Animation",
-  },
-];
-
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 const categoryStyles = {
@@ -144,9 +61,9 @@ function normalizeGig(gig) {
 
 function Home() {
   const [search, setSearch] = useState("");
-  const [gigs, setGigs] = useState(demoGigs.map(normalizeGig));
+  const [gigs, setGigs] = useState([]);
   const [isLoadingGigs, setIsLoadingGigs] = useState(true);
-  const [usingDemoGigs, setUsingDemoGigs] = useState(false);
+  const [gigError, setGigError] = useState("");
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
@@ -155,34 +72,39 @@ function Home() {
 
     async function loadGigs() {
       try {
+        setIsLoadingGigs(true);
+        setGigError("");
+
         const response = await fetch(`${API_URL}/api/gigs`);
+
         if (!response.ok) {
-          throw new Error("The gigs API is not available yet.");
+          throw new Error("Unable to fetch gigs. Please try again.");
         }
 
         const data = await response.json();
         const apiGigs = Array.isArray(data) ? data : data.gigs;
 
         if (!Array.isArray(apiGigs)) {
-          throw new Error("Unexpected response from the gigs API.");
+          throw new Error("Unexpected response from the server.");
         }
 
         if (isMounted) {
           setGigs(apiGigs.map(normalizeGig));
-          setUsingDemoGigs(false);
         }
-      } catch {
-        // Keep the sample cards visible until the backend endpoint is ready.
+      } catch (error) {
         if (isMounted) {
-          setGigs(demoGigs.map(normalizeGig));
-          setUsingDemoGigs(true);
+          setGigs([]);
+          setGigError(error.message);
         }
       } finally {
-        if (isMounted) setIsLoadingGigs(false);
+        if (isMounted) {
+          setIsLoadingGigs(false);
+        }
       }
     }
 
     loadGigs();
+
     return () => {
       isMounted = false;
     };
@@ -414,15 +336,21 @@ function Home() {
                   Checking for live gigs...
                 </p>
               )}
-              {!isLoadingGigs && usingDemoGigs && (
-                <p className="mt-1 text-xs text-amber-700">
-                  Showing sample gigs until the API is ready
-                </p>
+              {gigError && (
+                <p className="mt-1 text-xs text-red-600">{gigError}</p>
               )}
             </div>
           </div>
 
-          {filteredGigs.length > 0 ? (
+          {isLoadingGigs ? (
+            <div className="py-12 text-center text-gray-500">
+              Loading available gigs...
+            </div>
+          ) : gigError ? (
+            <div className="py-12 text-center text-red-600">
+              Unable to load gigs. Please refresh the page.
+            </div>
+          ) : filteredGigs.length > 0 ? (
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
               {filteredGigs.map((gig) => (
                 <article
@@ -434,8 +362,18 @@ function Home() {
                   }}
                   className="cursor-pointer overflow-hidden rounded-xl border bg-white transition hover:-translate-y-1 hover:shadow-lg"
                 >
-                  <div className="flex h-44 items-center justify-center bg-gray-200 text-gray-400">
-                    Gig Image
+                  <div className="h-44 overflow-hidden bg-gray-200">
+                    {gig.imageUrl ? (
+                      <img
+                        src={gig.imageUrl}
+                        alt={gig.title}
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      <div className="flex h-full items-center justify-center text-gray-400">
+                        Gig Image
+                      </div>
+                    )}
                   </div>
 
                   <div className="p-5">
@@ -468,16 +406,16 @@ function Home() {
             </div>
           ) : (
             <div className="rounded-xl border border-dashed p-10 text-center">
-              <p className="font-semibold">No gigs found</p>
+              <p className="font-semibold">No gigs available yet!</p>
               <p className="mt-2 text-sm text-gray-500">
-                Try another service or clear your search.
+                Be the first to create a gig on GiGHire.
               </p>
               <button
                 type="button"
                 onClick={() => setSearch("")}
                 className="mt-4 rounded-lg bg-blue-600 px-5 py-2 text-white hover:bg-blue-700"
               >
-                Clear search
+                Clear Search
               </button>
             </div>
           )}
