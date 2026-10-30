@@ -232,6 +232,13 @@ function WorkerDashboard() {
             >
               🔎 Browse Marketplace
             </Link>
+
+            <Link
+              to="/worker-profile"
+              className="block rounded-xl px-4 py-3 text-slate-300 hover:bg-slate-800"
+            >
+              👤 My Profile
+            </Link>
           </nav>
 
           <button
@@ -257,12 +264,21 @@ function WorkerDashboard() {
               </p>
             </div>
 
-            <button
-              onClick={() => navigate("/create-gig")}
-              className="rounded-xl bg-violet-600 px-5 py-3 font-semibold text-white shadow-sm hover:bg-violet-700"
-            >
-              + Create New Gig
-            </button>
+            <div className="flex flex-wrap gap-3">
+              <button
+                onClick={() => navigate("/worker-profile")}
+                className="rounded-xl border border-gray-300 bg-white px-5 py-3 font-semibold text-gray-700 hover:bg-gray-100"
+              >
+                👤 My Profile
+              </button>
+
+              <button
+                onClick={() => navigate("/create-gig")}
+                className="rounded-xl bg-violet-600 px-5 py-3 font-semibold text-white shadow-sm hover:bg-violet-700"
+              >
+                + Create New Gig
+              </button>
+            </div>
           </header>
 
           {notice && (

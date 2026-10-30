@@ -1,3 +1,4 @@
+
 import { createContext, useContext, useState } from 'react'
 
 const AuthContext = createContext(null)
@@ -22,6 +23,11 @@ export function AuthProvider({ children }) {
     setToken(authToken)
   }
 
+  function updateUser(userData) {
+    localStorage.setItem('user', JSON.stringify(userData))
+    setUser(userData)
+  }
+
   function logout() {
     localStorage.removeItem('user')
     localStorage.removeItem('token')
@@ -30,7 +36,9 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout }}>
+    <AuthContext.Provider
+      value={{ user, token, login, updateUser, logout }}
+    >
       {children}
     </AuthContext.Provider>
   )
