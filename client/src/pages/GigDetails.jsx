@@ -1,13 +1,22 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 function GigDetails() {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const { user, token } = useAuth();
+
   const [gig, setGig] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  const [message, setMessage] = useState("");
+  const [bookingLoading, setBookingLoading] = useState(false);
+  const [bookingNotice, setBookingNotice] = useState("");
+  const [bookingError, setBookingError] = useState("");
 
   useEffect(() => {
     async function fetchGig() {
@@ -32,6 +41,49 @@ function GigDetails() {
 
     fetchGig();
   }, [id]);
+
+  async function handleBooking() {
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+
+    if (user?.role !== "client") {
+      setBookingError("Only clients can book a gig.");
+      return;
+    }
+
+    try {
+      setBookingLoading(true);
+      setBookingError("");
+      setBookingNotice("");
+
+      const response = await fetch(`${API_URL}/api/bookings`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          gigId: id,
+          message,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Booking request failed.");
+      }
+
+      setBookingNotice("Booking request sent successfully!");
+      setMessage("");
+    } catch (err) {
+      setBookingError(err.message || "Unable to send booking request.");
+    } finally {
+      setBookingLoading(false);
+    }
+  }
 
   if (loading) {
     return (
@@ -60,6 +112,9 @@ function GigDetails() {
     typeof gig.worker === "object"
       ? gig.worker?.name
       : gig.workerName || "GiGHire Worker";
+
+  const isOwnGig =
+    user?.role === "worker" && (gig.worker?._id || gig.worker) === user?._id;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -92,9 +147,7 @@ function GigDetails() {
           </div>
 
           <div className="rounded-2xl border bg-white p-8">
-            <p className="mb-3 font-medium text-indigo-600">
-              {gig.category}
-            </p>
+            <p className="mb-3 font-medium text-indigo-600">{gig.category}</p>
 
             <h1 className="mb-6 text-3xl font-bold text-gray-900">
               {gig.title}
@@ -136,17 +189,65 @@ function GigDetails() {
             </div>
           </div>
 
-          <button
-            type="button"
-            disabled
-            className="w-full cursor-not-allowed rounded-lg bg-indigo-600 px-5 py-3 font-semibold text-white opacity-70"
-          >
-            Booking Coming Soon
-          </button>
+          {user?.role === "client" && (
+            <div className="border-t pt-5">
+              <label className="mb-2 block text-sm font-semibold text-gray-700">
+                Additional Message (Optional)
+              </label>
 
-          <p className="mt-3 text-center text-xs text-gray-400">
-            Booking functionality will be added next.
-          </p>
+              <textarea
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                maxLength={500}
+                rows={4}
+                placeholder="Tell the worker about your requirements..."
+                className="w-full rounded-lg border border-gray-300 p-3 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+              />
+
+              <button
+                type="button"
+                onClick={handleBooking}
+                disabled={bookingLoading}
+                className="mt-4 w-full rounded-lg bg-indigo-600 px-5 py-3 font-semibold text-white transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {bookingLoading ? "Sending Request..." : "Book This Gig"}
+              </button>
+            </div>
+          )}
+
+          {!user && (
+            <button
+              type="button"
+              onClick={() => navigate("/login")}
+              className="w-full rounded-lg bg-indigo-600 px-5 py-3 font-semibold text-white hover:bg-indigo-700"
+            >
+              Login to Book
+            </button>
+          )}
+
+          {isOwnGig && (
+            <p className="rounded-lg bg-gray-100 p-3 text-center text-sm text-gray-600">
+              This is your own gig.
+            </p>
+          )}
+
+          {user?.role === "worker" && !isOwnGig && (
+            <p className="rounded-lg bg-gray-100 p-3 text-center text-sm text-gray-600">
+              Only clients can book services.
+            </p>
+          )}
+
+          {bookingNotice && (
+            <p className="mt-4 rounded-lg bg-green-50 p-3 text-sm text-green-700">
+              {bookingNotice}
+            </p>
+          )}
+
+          {bookingError && (
+            <p className="mt-4 rounded-lg bg-red-50 p-3 text-sm text-red-700">
+              {bookingError}
+            </p>
+          )}
         </aside>
       </main>
     </div>
