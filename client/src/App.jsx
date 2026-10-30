@@ -8,6 +8,7 @@ import WorkerDashboard from "./pages/WorkerDashboard";
 import CreateGig from "./pages/CreateGig";
 import ProtectedRoute from "./components/ProtectedRoute";
 import GigDetails from "./pages/GigDetails";
+import ClientDashboard from "./pages/ClientDashboard";
 
 function App() {
   return (
@@ -21,6 +22,9 @@ function App() {
           <Route element={<ProtectedRoute allowedRole="worker" />}>
             <Route path="/worker-dashboard" element={<WorkerDashboard />} />
             <Route path="/create-gig" element={<CreateGig />} />
+          </Route>
+          <Route element={<ProtectedRoute allowedRole="client" />}>
+            <Route path="/client-dashboard" element={<ClientDashboard />} />
           </Route>
         </Routes>
       </BrowserRouter>
