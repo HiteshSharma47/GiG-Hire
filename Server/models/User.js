@@ -1,5 +1,4 @@
-const mongoose = require('mongoose');
-
+const mongoose = require("mongoose");
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -16,6 +15,12 @@ const userSchema = new mongoose.Schema(
       lowercase: true,
     },
 
+    phone: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+
     password: {
       type: String,
       required: true,
@@ -25,13 +30,39 @@ const userSchema = new mongoose.Schema(
 
     role: {
       type: String,
-      enum: ['client', 'worker'],
+      enum: ["client", "worker"],
       required: true,
+    },
+
+    resetPasswordOTP: {
+      type: String,
+      select: false,
+    },
+
+    resetPasswordOTPExpires: {
+      type: Date,
+      select: false,
+    },
+
+    resetPasswordOTPAttempts: {
+      type: Number,
+      default: 0,
+      select: false,
+    },
+
+    passwordResetAuthorization: {
+      type: String,
+      select: false,
+    },
+
+    passwordResetAuthorizationExpires: {
+      type: Date,
+      select: false,
     },
   },
   {
     timestamps: true,
-  }
+  },
 );
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model("User", userSchema);
